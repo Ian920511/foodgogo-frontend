@@ -21,27 +21,44 @@ export default {
     }
   },
 
-  async postProduct({ formData }) {
+  async postProduct(formData) {
     try {
+
       const response = await apiHelper.post(`/admin/products/`, formData)
 
-      return response.data
+       const { message } = response.data
+
+       return { ...response.data.data, message }
     } catch (error) {
       throw error.response.data
     }
   },
 
-  async updateProducts({ productId, formData }) {
+  async updateProduct({ productId, formData }) {
     try {
+
       const response = await apiHelper.put(`/admin/products/${productId}`, formData)
 
-      return response.data
+      return { ...response.data.data }
     } catch (error) {
       throw error.response.data
     }
   },
 
-  async deleteProducts({ productId }) {
+  async updateProductStatus(productId, status) {
+    try {
+      const response = await apiHelper.patch(
+        `/admin/products/${productId}?active=${status}`
+      )
+
+      return response.data.data
+    } catch (error) {
+      throw error.response.data
+    }
+  },
+
+
+  async deleteProduct(productId) {
     try {
       const response = await apiHelper.delete(`/admin/products/${productId}`)
 

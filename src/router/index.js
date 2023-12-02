@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import HomeView from './../views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -10,31 +10,31 @@ const router = createRouter({
       component: HomeView,
       children: [
         {
-          path: '/products',
+          path: '',
           name: 'ProductList',
-          component: () => import('../views/ProductList.vue'),
+          component: () => import('./../components/home/ProductList.vue'),
         },
         {
-          path: '/products/:productId',
+          path: 'product/:productId',
           name: 'ProductDetail',
-          component: () => import('../views/ProductDetail.vue'),
+          component: () => import('./../components/home/ProductDetail.vue'),
         }
       ]
     },
     {
       path: '/cart',
       name: 'CartView',
-      component: () => import('../views/CartView.vue')
+      component: () => import('./../views/CartView.vue')
     },
     {
       path: '/orders',
       name: 'OrderView',
-      component: () => import('../views/OrderView.vue')
+      component: () => import('./../views/OrderView.vue')
     },
     {
       path: '/admin',
       name: 'AdminView',
-      component: () => import('../views/AdminView.vue')
+      component: () => import('./../views/AdminView.vue')
     }
   ]
 })

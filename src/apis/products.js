@@ -1,7 +1,7 @@
 import { apiHelper } from './../utils/axios'
 
 export default {
-  async getProduct({ productId }) {
+  async getProduct(productId) {
     try {
       const response = await apiHelper.get(`/products/${productId}`)
 

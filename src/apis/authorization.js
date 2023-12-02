@@ -9,7 +9,7 @@ export default {
       })
 
       const { message } = response.data
-
+  
       return { ...response.data.data, message} 
     } catch (error) {
       throw error.response.data

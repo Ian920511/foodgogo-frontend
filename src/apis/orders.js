@@ -25,7 +25,7 @@ export default {
     try {
       const response = await apiHelper.post('/orders')
 
-      return response.data.data
+      return response
     } catch (error) {
       throw error.response.data
     }

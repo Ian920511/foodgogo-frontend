@@ -1,10 +1,10 @@
 import Swal from 'sweetalert2'
 
 export const useAlert = () => {
-  const showAlert = ( title, showConfirm, text = '') => {
+  const showAlert = ( icon , text = '', showConfirm) => {
     if (showConfirm) {
       return Swal.fire({
-        title,
+        icon,
         text,
         showCancelButton: true,
         confirmButtonText: '確定',
@@ -13,7 +13,8 @@ export const useAlert = () => {
     }
 
     return Swal.fire({
-      title
+      icon,
+      text
     })
   }
 
