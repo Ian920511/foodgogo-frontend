@@ -29,10 +29,14 @@ const { showAlert } = useAlert()
 
 const toggleModal = () => {
   showModal.value = !showModal.value
+
+  errorMessage.value = null
 }
 
 const toggleLoginRegister = () => {
-  isLoginMode.value = !isLoginMode.value;
+  isLoginMode.value = !isLoginMode.value
+
+  errorMessage.value = null
 }
 
 
@@ -51,12 +55,14 @@ const handleLogin = async () => {
     userStore.setCurrentUser(response.user)
 
     toggleModal()
+
+    showAlert('success', '登入成功')
     
   } catch (error) {
     
     errorMessage.value = error.message
   }
-};
+}
 
 const handleRegister = async () => {
   try {
@@ -68,25 +74,23 @@ const handleRegister = async () => {
       throw new Error('兩次輸入密碼不同');
     }
 
-    const response = await authorizationApi.register({
+    await authorizationApi.register({
       email: registerEmail.value,
       password: registerPassword.value,
       address: address.value,
       tel: tel.value,
       username: username.value,
       confirmPassword: passwordConfirm.value
-    });
+    })
 
+    showAlert('success', '註冊成功')
 
-    localStorage.setItem('token', response.token);
-    userStore.setCurrentUser(response.user)
-
-    toggleModal()
+    toggleLoginRegister()
 
   } catch (error) {
     errorMessage.value = error.message;
   }
-};
+}
 
 
 const logout = () => {
