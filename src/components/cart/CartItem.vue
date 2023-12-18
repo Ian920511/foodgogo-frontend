@@ -4,12 +4,12 @@ import { storeToRefs } from 'pinia'
 import { useCartStore } from './../../stores/cartStore'
 import { useAlert } from './../../utils/alert'
 
-
 const props = defineProps(['cartItem'])
 const cartStore = useCartStore()
 const { updateCartItem, deleteCartItem } = cartStore
 const { cartItems, errorMessage } =  storeToRefs(cartStore)
 const { showAlert } = useAlert()
+
 const total = computed(() => {
   return props.cartItem.quantity * props.cartItem.product.price
 })

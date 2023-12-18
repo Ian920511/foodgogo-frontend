@@ -27,7 +27,7 @@ export default {
         quantity
       })
 
-      return response.data.data.cart.cartItem
+      return response.data
     } catch(error) {
       throw error.response.data
     }

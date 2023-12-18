@@ -11,24 +11,20 @@ const CartList = defineAsyncComponent(() =>
 
 const router = useRouter()
 const userStore = useUserStore()
-const { isAuthenticate, currentUser } = storeToRefs(userStore)
+const { isAuthenticated } = storeToRefs(userStore)
 const { showAlert } = useAlert()
 
-// onMounted(() => {
-//   if (!isAuthenticate.value || !currentUser.value.isAdmin ) {
-//     const title = !isAuthenticate.value
-//       ? '請先註冊或登入才能使用功能'
-//       : '沒有使用該頁面的權限'
+onMounted(() => {
+  if (!isAuthenticated.value ) {
+    showAlert('error', '請先登入才能使用功能' )
+    return router.replace({ name: 'ProductList' })
+  }
+})
 
-//     showAlert('error', title)
-//     return router.replace({ name: 'ProductList' })
-//   }
-// })
-// v -if= "isAuthenticate && !currentUser.isAdmin "
 </script>
 
 <template>
-  <main  class="px-10 py-12">
+  <main v-if= "isAuthenticated" class="px-10 py-12">
     <CartList />
   </main>
 </template>

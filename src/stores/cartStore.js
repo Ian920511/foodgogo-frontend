@@ -70,7 +70,7 @@ export const useCartStore = defineStore('cart', ()=> {
         cartItem.quantity = quantity
       }
 
-      await cartApi.updateCartItem(cartItem.id, cartItem.quantity)
+      await cartApi.updateCartItem({ cartItemId: cartItem.id, quantity: cartItem.quantity })
     } catch (error) {
       errorMessage.value = error.message
     }

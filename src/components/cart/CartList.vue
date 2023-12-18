@@ -26,9 +26,9 @@ onMounted(async () => {
 })
 
 const submitOrder = async () => {
-  const text = `目前總金額：NT$ ${totalPrice.value}`
+  const text = `總金額：NT$ ${totalPrice.value}`
 
-  showAlert('info', '確定要結帳嗎?', `${text} 元`, true).then(async (result) => {
+  showAlert('info', `確定要結帳嗎? ${text} 元`, true).then(async (result) => {
     if (result.isConfirmed) {
       try {
         const response = await postOrder()
@@ -36,6 +36,8 @@ const submitOrder = async () => {
         if (response.data.status === 'success') {
           cartItems.value = []
         }
+
+        showAlert('success', response.data.message )
         
       } catch (error) {
         console.error(error)

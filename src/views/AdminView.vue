@@ -28,7 +28,7 @@ const AdminList = defineAsyncComponent(() =>
 onMounted(() => {
   if (!isAuthenticated.value || !currentUser.value?.isAdmin ) {
     const title = !isAuthenticated.value
-      ? '請先註冊或登入才能使用功能'
+      ? '請先登入才能使用功能'
       : '沒有使用該頁面的權限'
 
     showAlert('error', title)

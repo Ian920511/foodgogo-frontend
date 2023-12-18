@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import userApi from './../apis/users' 
 
 export const useUserStore = defineStore('user', ()=> {
-  const isAuthenticated = ref(localStorage.getItem('token') !== null)
+  const isAuthenticated = ref(false)
   const currentUser = ref({
         id: '',
         name: '',

@@ -25,7 +25,7 @@ onMounted(async () => {
 const addItem = async (productId) => {
   try {
     if (!isAuthenticated.value) {
-      return showAlert('error', '請先註冊或登入才能使用功能')
+      return showAlert('error', '請先登入才能使用功能')
     }
     const { status, message } = await addCartItem({ productId, quantity: 1})
     if (status === 'success') {
