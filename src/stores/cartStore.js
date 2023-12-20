@@ -1,13 +1,16 @@
 import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import cartApi from './../apis/carts'
-import { useAlert } from './../utils/alert' 
+import { useAlert } from './../utils/alert'
+import { useStatusStore } from './statusStore'
 
 export const useCartStore = defineStore('cart', ()=> {
 
   const { showAlert } = useAlert()
   const cartItems = ref([])
   const errorMessage = ref(null)
+  const statusStore = useStatusStore()
+  const { isProcessing, isLoading } = storeToRefs(statusStore)
 
   const totalPrice = computed(() => {
     return cartItems.value.length
@@ -30,11 +33,14 @@ export const useCartStore = defineStore('cart', ()=> {
       cartItems.value = await cartApi.getCartItem()
     } catch (error) {
       throw error.message
-    } 
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const addCartItem = async (productId, quantity) => {
     try {
+      isProcessing.value = true
 
       if (quantity < 1) {
           return showAlert('warning', '數量不能小於1')
@@ -57,6 +63,8 @@ export const useCartStore = defineStore('cart', ()=> {
       }
     } catch (error) {
       throw error.message
+    } finally {
+      isProcessing.value = false
     }
   }
 

@@ -4,11 +4,14 @@ import { useRouter, RouterLink } from 'vue-router'
 import { useAlert } from './../../utils/alert'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from './../../stores/userStore'
+import { useStatusStore } from './../../stores/statusStore'
 import { useProductStore } from './../../stores/productStore'
 import authorizationApi from './../../apis/authorization'
 
 const router = useRouter()
 const userStore = useUserStore()
+const statusStore = useStatusStore()
+const { isProcessing } = storeToRefs(statusStore)
 const { isAuthenticated, currentUser }  = storeToRefs(userStore)
 const productStore = useProductStore()
 const { setSearchResult, getProducts } = productStore
@@ -42,6 +45,9 @@ const toggleLoginRegister = () => {
 
 const handleLogin = async () => {
   try {
+
+    isProcessing.value = true
+
     if (!loginEmail.value || !loginPassword.value) { 
       throw new Error('請輸入信箱和密碼')
     } 
@@ -61,11 +67,16 @@ const handleLogin = async () => {
   } catch (error) {
     
     errorMessage.value = error.message
+  } finally {
+    isProcessing.value = false
   }
 }
 
 const handleRegister = async () => {
   try {
+
+    isProcessing.value = true
+    
     if (!registerEmail.value || !registerPassword.value || !passwordConfirm.value || !address.value || !tel.value || !username.value) {
       throw new Error('請填寫註冊需要的資訊');
     }
@@ -89,6 +100,8 @@ const handleRegister = async () => {
 
   } catch (error) {
     errorMessage.value = error.message;
+  } finally {
+    isProcessing.value = false
   }
 }
 
@@ -103,7 +116,7 @@ const logout = () => {
 
 const handleReset = async () => {
   searchQuery.value = ''
-  router.replace({ name: 'ProductList', query: { keyword: '' } });
+  router.replace({ name: 'ProductList' });
   await getProducts()
 }
 
@@ -163,7 +176,7 @@ const handleReset = async () => {
               <input type="checkbox" class="form-check-input" id="rememberMe">
               <label class="form-check-label" for="rememberMe">記住我</label>
             </div>
-              <button type="submit" class="btn btn-primary">登入</button>
+              <button type="submit" :disabled="isProcessing" class="btn btn-primary">登入</button>
           </form>
           <form v-else @submit.prevent="handleRegister">
             <div class="form-group">
@@ -190,7 +203,7 @@ const handleReset = async () => {
                   <label for="tel">電話:</label>
                   <input type="text" class="form-control" id="tel" v-model="tel" required>
               </div>
-              <button type="submit" class="btn btn-primary">註冊</button>
+              <button type="submit" class="btn btn-primary" :disabled="isProcessing" >註冊</button>
           </form>
         </div>
         <div class="modal-footer">

@@ -1,8 +1,9 @@
 import { ref, computed  } from 'vue'
 import { useRouter } from 'vue-router'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import productApi from './../apis/products'
 import categoriesApi from './../apis/categories'
+import { useStatusStore } from './statusStore'
 
 export const useProductStore = defineStore('product', ()=> {
   const router = useRouter()
@@ -13,6 +14,8 @@ export const useProductStore = defineStore('product', ()=> {
   const categories = ref([])
   const errorMessage = ref(null)
   const orderBy = ref('createdAt')
+  const statusStore = useStatusStore()
+  const { isLoading } = storeToRefs(statusStore)
 
   const sortedProduct = computed(() => {
     if (orderBy.value === 'priceAsc') {
@@ -35,7 +38,9 @@ export const useProductStore = defineStore('product', ()=> {
 
     } catch (error) {
       errorMessage.value = error.message
-    } 
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const getProduct = async (id) => {
@@ -44,7 +49,9 @@ export const useProductStore = defineStore('product', ()=> {
  
     } catch (error) {
       errorMessage.value = error.message
-    } 
+    } finally {
+      isLoading.value = false
+    }
   }
 
   const getCategories = async () => {

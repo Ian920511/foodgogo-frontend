@@ -2,10 +2,13 @@
 import { onMounted, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAdminStore } from './../../stores/adminStore'
+import { useStatusStore } from './../../stores/statusStore'
 import { useProductStore } from './../../stores/productStore'
 
 const productStore = useProductStore()
 const adminStore = useAdminStore()
+const statusStore = useStatusStore()
+const { isProcessing } = storeToRefs(statusStore)
 const { addOrUpdateItem, toggleModal } = adminStore
 const { formData, modalType } = storeToRefs(adminStore)
 const { categories } = storeToRefs(productStore)
@@ -99,7 +102,8 @@ const handleSubmit = async (event) => {
           {{ errorMessage }}
       </p>
 
-      <button type="submit" class="btn btn-primary mr-2" >
+      <button type="submit" class="btn btn-primary mr-2" 
+        :disabled="isProcessing" >
           {{ modalType === 'updateItem' ? '更新' : '新增' }}商品
       </button>
 

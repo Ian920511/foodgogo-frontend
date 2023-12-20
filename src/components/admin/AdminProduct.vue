@@ -25,9 +25,12 @@ const handleRemoveProduct = (id) => {
 <template>
   <tr class="text-center">
     <td>
-      <button v-if="!active" class="btn btn-danger btn-sm" @click="handleRemoveProduct(product.id)">刪除
+      <button v-if="!active" class="btn btn-danger btn-sm" :disabled="isProcessing" 
+      @click="handleRemoveProduct(product.id)">刪除
       </button>
-      <button v-if="active" class="btn btn-success btn-sm"     @click="toggleActive(product.id, active)"> 下架
+      <button v-if="active" class="btn btn-success btn-sm"
+      :disabled="isProcessing" 
+      @click="toggleActive(product.id, active)"> 下架
       </button>
       
     </td>
@@ -38,9 +41,11 @@ const handleRemoveProduct = (id) => {
     <td>{{ product.description }}</td>
     <td>NT$ {{ product.price }}</td>
     <td>
-      <button v-if="!active" class="btn btn-primary btn-sm" @click="toggleActive(product.id, active)"> 上架
+      <button v-if="!active" class="btn btn-primary btn-sm" :disabled="isProcessing" 
+      @click="toggleActive(product.id, active)"> 上架
       </button>
-      <button v-else class="btn btn-primary btn-sm" @click="toggleModal(product.id)">
+      <button v-else class="btn btn-primary btn-sm" 
+      @click="toggleModal(product.id)">
         更新
       </button>
     </td>

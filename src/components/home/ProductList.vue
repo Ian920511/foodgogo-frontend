@@ -3,7 +3,9 @@ import { onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useProductStore } from './../../stores/productStore'
+import { useStatusStore } from './../../stores/statusStore'
 import ProductItem from './ProductItem.vue'
+import SpinnerLoading from './../spinner/SpinnerLoading.vue'
 
 
 const route = useRoute()
@@ -17,6 +19,8 @@ const {
   errorMessage,
   orderBy
 } = storeToRefs(productStore)
+const statusStore = useStatusStore()
+const { isLoading } = storeToRefs(statusStore)
 const { getProducts } = productStore
 
 onMounted(async () => {
@@ -36,31 +40,34 @@ const handleChangeOrderBy = () => {
 </script>
 
 <template>
-  <section class="container mt-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="font-weight-bold text-dark">上架商品</h3>
-      <div style="width: 200px;">
-        <select class="cursor-pointer form-control form-control-sm" v-model="orderBy" @change="handleChangeOrderBy"
-          style="width: 100%;">
-          <option value="createdAt">依上架時間排序</option>
-          <option value="priceDesc">依金額高到低排序</option>
-          <option value="priceAsc">依金額低到高排序</option>
-        </select>
-      </div>
-    </div>
-    <p v-if="errorMessage" class="text-center text-danger">
-      {{ errorMessage }}
-    </p>
-    <div v-if="searchResult && searchResult.length" class="row">
-      <div v-for="product in sortedProduct" :key="product.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
-        <ProductItem :product="product" />
-      </div>
-    </div>
-    <p v-else-if="!searchResult && products && !products.length" class="text-center">
-      目前沒有商品
-    </p>
-    <p v-else class="text-center">
-      找不到搜尋結果
-    </p>
-  </section>
+    <section class="container mt-3">
+      <SpinnerLoading v-if="isLoading" />
+      <template v-else>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="font-weight-bold text-dark">上架商品</h3>
+          <div style="width: 200px;">
+            <select class="cursor-pointer form-control form-control-sm" v-model="orderBy" @change="handleChangeOrderBy"
+              style="width: 100%;">
+              <option value="createdAt">依上架時間排序</option>
+              <option value="priceDesc">依金額高到低排序</option>
+              <option value="priceAsc">依金額低到高排序</option>
+            </select>
+          </div>
+        </div>
+        <p v-if="errorMessage" class="text-center text-danger">
+          {{ errorMessage }}
+        </p>
+        <div v-if="searchResult && searchResult.length" class="row">
+          <div v-for="product in sortedProduct" :key="product.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+            <ProductItem :product="product" />
+          </div>
+        </div>
+        <p v-else-if="!searchResult && products && !products.length" class="text-center">
+          目前沒有商品
+        </p>
+        <p v-else class="text-center">
+          找不到搜尋結果
+        </p>
+      </template>
+    </section>
 </template>

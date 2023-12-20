@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import  { useUserStore } from './../../stores/userStore'
 import { useCartStore } from './../../stores/cartStore'
+import { useStatusStore } from './../../stores/statusStore'
 import { useAlert } from './../../utils/alert'
 
 defineProps({
@@ -15,6 +16,8 @@ defineProps({
 const router = useRouter()
 const userStore = useUserStore()
 const cartStore = useCartStore()
+const statusStore = useStatusStore()
+const { isProcessing } = storeToRefs(statusStore)
 const { isAuthenticated } = storeToRefs(userStore)
 const { addCartItem } = cartStore
 const { showAlert } = useAlert()
@@ -48,7 +51,7 @@ const addItem = async (productId) => {
       <h5 class="card-title mb-1">{{ product.name }}</h5>
       <p class="card-text text-lg font-weight-bold text-info">NT$ {{ product.price }}</p>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary" @click="addItem(product.id)">
+        <button class="btn btn-primary" :disabled="isProcessing" @click="addItem(product.id)">
           加入購物車
         </button>
       </div>

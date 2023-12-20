@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from './../../stores/userStore'
 import { useProductStore } from './../../stores/productStore'
+import { useStatusStore } from './../../stores/statusStore'
 import { useCartStore } from './../../stores/cartStore'
 import { useAlert } from './../../utils/alert'
 
@@ -12,6 +13,8 @@ const router = useRouter()
 const userStore = useUserStore()
 const productStore = useProductStore()
 const cartStore = useCartStore()
+const statusStore = useStatusStore()
+const { isProcessing } = storeToRefs(statusStore)
 const { isAuthenticated } = storeToRefs(userStore)
 const { product, errorMessage } = storeToRefs(productStore)
 const { getProduct } = productStore
@@ -56,7 +59,7 @@ const addItem = async (productId) => {
         <p class="mb-2">商品敘述： {{ product.description }}</p>
         <p class="mb-4">商品單價： NT$ {{ product.price }}</p>
         <div class="d-flex justify-content-between">
-          <button class="btn btn-primary" @click="addItem(product.id)">
+          <button class="btn btn-primary" :disabled="isProcessing" @click="addItem(product.id)">
             加入購物車
           </button>
           <button class="btn btn-outline-secondary" @click="router.go(-1)">

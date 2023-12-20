@@ -1,8 +1,8 @@
 import { ref } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import adminApi from './../apis/admin'
 import { useAlert } from './../utils/alert'
-
+import { useStatusStore } from './statusStore'
 
 export const useAdminStore = defineStore('admin', () => {
   
@@ -14,6 +14,8 @@ export const useAdminStore = defineStore('admin', () => {
   const errorMessage = ref(null)
   const initialCategory = ref(null)
   const updateProduct = ref(null)
+  const statusStore = useStatusStore()
+  const { isProcessing, isLoading } = storeToRefs(statusStore)
 
   const formData = ref({
     name: '',
@@ -26,8 +28,8 @@ export const useAdminStore = defineStore('admin', () => {
 
   const getItems = async () => {
     try {
-      const products = await adminApi.getProducts() 
 
+      const products = await adminApi.getProducts() 
 
       activeProducts.value = []
       nonActiveProducts.value = []
@@ -43,6 +45,8 @@ export const useAdminStore = defineStore('admin', () => {
 
     } catch (error) {
       throw error.message
+    } finally {
+      isLoading.value = false
     }
   }
 
@@ -51,7 +55,7 @@ export const useAdminStore = defineStore('admin', () => {
     try {
 
       const newForm = new FormData(form)
-
+      isProcessing.value = true
 
       if (modalType.value === 'addItem') {
         const { product, message } = await adminApi.postProduct(newForm)
@@ -80,13 +84,15 @@ export const useAdminStore = defineStore('admin', () => {
       }
     } catch (error) {
       throw { code: error.code, message: error.message }
+    } finally {
+      isProcessing.value = false
     }
   }
 
 
   const toggleActive = async (productId, status) => {
     try {
-
+      isProcessing.value = true
       const { product } = await adminApi.updateProductStatus(productId, !status)  
 
       if (status) {
@@ -100,6 +106,8 @@ export const useAdminStore = defineStore('admin', () => {
 
     } catch (error) {
       throw { code: error.code, message: error.message }
+    } finally {
+      isProcessing.value = false
     }
   }
 
@@ -107,19 +115,22 @@ export const useAdminStore = defineStore('admin', () => {
 
   const deleteItem = async (productId) => {
     try {
+      isProcessing.value = true
+
       await adminApi.deleteProduct(productId)
       nonActiveProducts.value = nonActiveProducts.value.filter(
         (product) => product.id !== productId
       )
     } catch (error) {
       errorMessage.value = error.message
+    } finally {
+      isProcessing.value = false
     }
   }
 
 
   const toggleModal = (id) => {
     showItemModal.value = !showItemModal.value
-
 
     if (showItemModal.value && id) {
       modalType.value = 'updateItem'
