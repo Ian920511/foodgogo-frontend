@@ -26,9 +26,9 @@ export default {
 
       const response = await apiHelper.post(`/admin/products/`, formData)
 
-       const { message } = response.data
+      const { message } = response.data
 
-       return { ...response.data.data, message }
+      return { ...response.data.data, message }
     } catch (error) {
       throw error.response.data
     }
@@ -39,7 +39,9 @@ export default {
 
       const response = await apiHelper.put(`/admin/products/${productId}`, formData)
 
-      return { ...response.data.data }
+      const { message } = response.data
+
+      return { ...response.data.data, message }
     } catch (error) {
       throw error.response.data
     }

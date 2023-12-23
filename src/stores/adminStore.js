@@ -72,13 +72,16 @@ export const useAdminStore = defineStore('admin', () => {
           productId: updateProduct.value.id,
           formData: newForm
       })
-
+        
         if (product) {
           showAlert('success', message).then(() => {
             activeProducts.value = activeProducts.value.map((activeProduct) =>
-              activeProduct.id === product.id ? product : activeProduct
-            )
+            activeProduct.id === product.id ? product : activeProduct
+          )
           })
+
+          
+          
           toggleModal()
         }
       }
