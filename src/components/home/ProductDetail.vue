@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref, watch  } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from './../../stores/userStore'
@@ -29,10 +29,12 @@ onMounted(async () => {
 
   if (isAuthenticated.value) {
     await getFavorites()
-
-    isFavorited.value = favorites.value.some((favorite) => favorite.productId === route.params.productId)
   }
 })
+
+watch(favorites, (newFavorites) => {
+  isFavorited.value = newFavorites.some((favorite) => favorite.productId === route.params.productId)
+}, { immediate: true })
 
 
 const fromNow = computed(() => (datetime) => {
