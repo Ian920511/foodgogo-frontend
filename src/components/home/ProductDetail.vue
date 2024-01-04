@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, computed } from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useUserStore } from './../../stores/userStore'
@@ -16,15 +16,24 @@ const productStore = useProductStore()
 const cartStore = useCartStore()
 const statusStore = useStatusStore()
 const { isProcessing } = storeToRefs(statusStore)
-const { isAuthenticated, currentUser } = storeToRefs(userStore)
+const { isAuthenticated, currentUser, favorites } = storeToRefs(userStore)
 const { product, errorMessage, reviews } = storeToRefs(productStore)
+const { getFavorites, addFavorite, removeFavorite } = userStore
 const { getProduct } = productStore
 const { addCartItem } = cartStore
 const { showAlert } = useAlert()
+const isFavorited = ref(false)
 
 onMounted(async () => {
   await getProduct(route.params.productId)
+
+  if (isAuthenticated.value) {
+    await getFavorites()
+
+    isFavorited.value = favorites.value.some((favorite) => favorite.productId === route.params.productId)
+  }
 })
+
 
 const fromNow = computed(() => (datetime) => {
   if (!datetime) {
@@ -46,6 +55,37 @@ const addItem = async (productId) => {
     showAlert('error', error)
   }
 }
+
+const toggleFavorite = async (productId) => {
+  try {
+    if (!isAuthenticated.value) {
+      return showAlert('error', '請先登入才能使用功能')
+    }
+    
+    if (isFavorited.value) {
+      const { status, message } = await removeFavorite({ productId })
+
+      if (status === 'success') {
+        showAlert('success', message)
+      }
+
+      isFavorited.value = false
+    } else {
+      const { status, message } = await addFavorite({ productId })
+
+      if (status === 'success') {
+        showAlert('success', message)
+      }
+
+      isFavorited.value = true
+    }
+
+  } catch (error) {
+    showAlert('error', error)
+  }
+}
+
+
 </script>
 
 <template>
@@ -67,9 +107,11 @@ const addItem = async (productId) => {
         <p class="mb-2">商品敘述： {{ product.description }}</p>
         <p class="mb-4">商品單價： NT$ {{ product.price }}</p>
         <div class="d-flex justify-content-end">
-          <button class="btn btn-primary m-2" :disabled="isProcessing" @click="addItem(product.id)">
-              加入追蹤
-            </button>
+          <button class="btn m-2" :disabled="isProcessing" 
+          :class="isFavorited ? 'btn-danger' : 'btn-primary'"
+          @click="toggleFavorite(product.id)">
+              {{ isFavorited ? '取消追蹤' : '加入追蹤' }}
+          </button>
           <button class="btn btn-primary m-2" :disabled="isProcessing" @click="addItem(product.id)">
             加入購物車
           </button>

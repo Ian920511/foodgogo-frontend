@@ -11,7 +11,7 @@ export default {
     }
   },
 
-  async addCartItem({ productId, quantity}) {
+  async addCartItem({ productId, quantity }) {
     try {
       const response = await apiHelper.post('/carts', { productId, quantity })
 

@@ -1,4 +1,5 @@
 <script setup>
+import { computed  } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import  { useUserStore } from './../../stores/userStore'
@@ -6,10 +7,10 @@ import { useCartStore } from './../../stores/cartStore'
 import { useStatusStore } from './../../stores/statusStore'
 import { useAlert } from './../../utils/alert'
 
-defineProps({
+const props = defineProps({
   product: {
     type: Object,
-    required: true
+    required: true,
   }
 })
 
@@ -18,9 +19,19 @@ const userStore = useUserStore()
 const cartStore = useCartStore()
 const statusStore = useStatusStore()
 const { isProcessing } = storeToRefs(statusStore)
-const { isAuthenticated } = storeToRefs(userStore)
+const { isAuthenticated, favorites } = storeToRefs(userStore)
+const { addFavorite, removeFavorite } = userStore
 const { addCartItem } = cartStore
 const { showAlert } = useAlert()
+
+const isFavorited = computed(() => {
+  if (isAuthenticated.value) {
+    return favorites.value.some((favorite) => favorite.productId === props.product.id)
+  } else {
+    return false
+  }
+})
+
 
 
 const handleShowDetail = (id) => {
@@ -41,6 +52,35 @@ const addItem = async (productId) => {
     showAlert('error', error)
   }
 }
+
+const toggleFavorite = async (productId) => {
+  try {
+    if (!isAuthenticated.value) {
+      return showAlert('error', '請先登入才能使用功能')
+    }
+
+    if (isFavorited.value) {
+      const { status, message } = await removeFavorite({ productId })
+
+      if (status === 'success') {
+        showAlert('success', message)
+      }
+
+      
+    } else {
+      const { status, message } = await addFavorite({ productId })
+
+      if (status === 'success') {
+        showAlert('success', message)
+      }
+
+    }
+
+  } catch (error) {
+    showAlert('error', error)
+  }
+}
+
 </script>
 
 <template>
@@ -51,8 +91,10 @@ const addItem = async (productId) => {
       <h5 class="card-title mb-1">{{ product.name }}</h5>
       <p class="card-text text-lg font-weight-bold text-info">NT$ {{ product.price }}</p>
       <div class="d-flex justify-content-end">
-        <button class="btn btn-primary m-1" :disabled="isProcessing" @click="addItem(product.id)">
-            加入追蹤
+        <button class="btn m-1" :disabled="isProcessing" 
+        :class="isFavorited ? 'btn-danger' : 'btn-primary'"
+        @click="toggleFavorite(product.id)">
+            {{ isFavorited ? '取消追蹤' : '加入追蹤' }}
           </button>
         <button class="btn btn-primary m-1" :disabled="isProcessing" @click="addItem(product.id)">
           加入購物車

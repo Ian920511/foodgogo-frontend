@@ -49,7 +49,6 @@ export const useProductStore = defineStore('product', ()=> {
       const data = await productApi.getProduct(id)
       product.value = data.product
       reviews.value = data.reviews
-      console.log(reviews.value)
  
     } catch (error) {
       errorMessage.value = error.message

@@ -12,8 +12,9 @@ const router = useRouter()
 const userStore = useUserStore()
 const statusStore = useStatusStore()
 const { isProcessing } = storeToRefs(statusStore)
-const { isAuthenticated, currentUser }  = storeToRefs(userStore)
+const { isAuthenticated, currentUser, favorites }  = storeToRefs(userStore)
 const productStore = useProductStore()
+const { getFavorites } = userStore
 const { setSearchResult, getProducts } = productStore
 const { searchQuery } = storeToRefs(productStore)
 
@@ -63,6 +64,8 @@ const handleLogin = async () => {
     toggleModal()
 
     showAlert('success', '登入成功')
+
+    await getFavorites()
     
   } catch (error) {
     
@@ -107,6 +110,8 @@ const handleRegister = async () => {
 
 
 const logout = () => {
+  favorites.value = []
+
   userStore.revokeAuthentication()
 
   showAlert('success', '登出成功')
