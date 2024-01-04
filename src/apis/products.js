@@ -5,7 +5,7 @@ export default {
     try {
       const response = await apiHelper.get(`/products/${productId}`)
 
-      return response.data.data.product
+      return response.data.data
     } catch (error) {
       throw error.response.data
     }

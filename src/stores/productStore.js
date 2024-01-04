@@ -8,6 +8,7 @@ import { useStatusStore } from './statusStore'
 export const useProductStore = defineStore('product', ()=> {
   const router = useRouter()
   const products = ref([])
+  const reviews = ref([])
   const product = ref(null)
   const searchQuery = ref('')
   const searchResult = ref(null)
@@ -45,7 +46,10 @@ export const useProductStore = defineStore('product', ()=> {
 
   const getProduct = async (id) => {
     try {
-      product.value = await productApi.getProduct(id)
+      const data = await productApi.getProduct(id)
+      product.value = data.product
+      reviews.value = data.reviews
+      console.log(reviews.value)
  
     } catch (error) {
       errorMessage.value = error.message
@@ -95,6 +99,7 @@ export const useProductStore = defineStore('product', ()=> {
   return {
     products,
     product,
+    reviews,
     searchQuery,
     searchResult,
     categories,
