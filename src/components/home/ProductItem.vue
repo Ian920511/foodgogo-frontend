@@ -26,7 +26,7 @@ const { showAlert } = useAlert()
 
 const isFavorited = computed(() => {
   if (isAuthenticated.value) {
-    return favorites.value.some((favorite) => favorite.productId === props.product.id)
+    return favorites.value.some((favorite) => favorite.product.id === props.product.id)
   } else {
     return false
   }
@@ -63,14 +63,18 @@ const toggleFavorite = async (productId) => {
       const { status, message } = await removeFavorite({ productId })
 
       if (status === 'success') {
+        favorites.value = favorites.value.filter(fav => fav.product.id !== productId)
+
         showAlert('success', message)
       }
-
       
     } else {
       const { status, message } = await addFavorite({ productId })
 
       if (status === 'success') {
+        const newFavorite = { product: props.product }
+        favorites.value.push(newFavorite)
+
         showAlert('success', message)
       }
 

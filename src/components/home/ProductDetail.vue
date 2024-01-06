@@ -35,7 +35,8 @@ onMounted(async () => {
 })
 
 watch(favorites, (newFavorites) => {
-  isFavorited.value = newFavorites.some((favorite) => favorite.productId === route.params.productId)
+  isFavorited.value = newFavorites.some((favorite) => 
+  favorite.product.id === route.params.productId)
 }, { immediate: true })
 
 

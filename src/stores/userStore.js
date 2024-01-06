@@ -13,7 +13,7 @@ export const useUserStore = defineStore('user', ()=> {
   const { isProcessing } = storeToRefs(statusStore)
   const { reviews } = storeToRefs(productStore)
   const favorites = ref([])
-  const isAuthenticated = ref(false)
+  const isAuthenticated = ref(localStorage.getItem('token') !== null)
   const currentUser = ref({
         id: '',
         name: '',
@@ -60,6 +60,7 @@ export const useUserStore = defineStore('user', ()=> {
   const getFavorites = async () => {
     try {
       const response = await userApi.getFavorites()
+
       favorites.value = response.data.favorites
       
     } catch (error) {
