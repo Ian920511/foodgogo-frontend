@@ -18,11 +18,13 @@ const statusStore = useStatusStore()
 const { isProcessing } = storeToRefs(statusStore)
 const { isAuthenticated, currentUser, favorites } = storeToRefs(userStore)
 const { product, errorMessage, reviews } = storeToRefs(productStore)
-const { getFavorites, addFavorite, removeFavorite } = userStore
+const { getFavorites, addFavorite, removeFavorite, addReview, removeReview } = userStore
 const { getProduct } = productStore
 const { addCartItem } = cartStore
 const { showAlert } = useAlert()
 const isFavorited = ref(false)
+const text = ref('')
+const rating = ref('')
 
 onMounted(async () => {
   await getProduct(route.params.productId)
@@ -87,6 +89,46 @@ const toggleFavorite = async (productId) => {
   }
 }
 
+const handlePostReview = async () => {
+  try {
+    const productId = route.params.productId
+
+    if (!text.value) {
+      return showAlert('error', '評論必須輸入內容')
+    }
+
+    if (!rating.value) {
+      return showAlert('error', '評論必須輸入等級')
+    }
+    
+    const response = await addReview({ productId, comment: text.value, rating: rating.value })
+
+    const newReview = {
+      ...response.data.data.review,
+      user: {
+        username:  currentUser.value.name
+      }
+    }
+
+    reviews.value = [newReview, ...reviews.value]
+
+  } catch (error) {
+    showAlert('error', error)
+  }
+
+}
+
+const handleRemoveReview = (reviewId) => {
+
+  showAlert('warning', '確定要刪除此評論嗎?', true).then((result) => {
+    if (result.isConfirmed) {
+
+      return removeReview(reviewId)
+    }
+    return
+  })
+}
+
 
 </script>
 
@@ -133,6 +175,7 @@ const toggleFavorite = async (productId) => {
           <button
             v-if="currentUser.isAdmin"
             type="button"
+            @click="handleRemoveReview(review.id)"
             class="btn btn-danger float-right"
           >
             Delete
@@ -152,10 +195,22 @@ const toggleFavorite = async (productId) => {
       </p>
     </div>
 
+    <div class="form-group">
+      <label for="rating">rating</label>
+      <select id="rating" v-model.number="rating" class="form-control" name="rating" required>
+        <option value="" disabled selected>Enter rating</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
     <form>
       <div class="form-group mb-4">
         <label for="text">留下評論：</label>
         <textarea
+          v-model="text"
           class="form-control"
           rows="3"
           name="text"
@@ -163,8 +218,9 @@ const toggleFavorite = async (productId) => {
       </div>
       <div class="d-flex align-items-center justify-content-between">
         <button
-          type="submit"
+          type="button"
           class="btn btn-primary mr-0"
+          @click="handlePostReview()"
         >
           Submit
         </button>

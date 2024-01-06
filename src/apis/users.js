@@ -39,5 +39,26 @@ export default {
     } catch (error) {
       throw error.response.data
     }
+  },
+
+  async addReview({ productId, comment, rating }) {
+    try {
+      const response = await apiHelper.post('/reviews', { productId, comment, rating })
+
+      return response
+    } catch(error) {
+      throw error.response.data
+    }
+  },
+
+  async removeReview({ reviewId }) {
+    try {
+      const response = await apiHelper.delete(`/reviews/${reviewId}`)
+
+      return response.data
+    } catch (error) {
+      throw error.response.data
+    }
   }
+
 }

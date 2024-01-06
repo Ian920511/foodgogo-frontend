@@ -3,12 +3,15 @@ import { defineStore, storeToRefs } from 'pinia'
 import userApi from './../apis/users'
 import { useAlert } from './../utils/alert'
 import { useStatusStore } from './statusStore'
+import { useProductStore } from './productStore'
 
 export const useUserStore = defineStore('user', ()=> {
 
   const { showAlert } = useAlert()
   const statusStore = useStatusStore()
+  const productStore = useProductStore()
   const { isProcessing } = storeToRefs(statusStore)
+  const { reviews } = storeToRefs(productStore)
   const favorites = ref([])
   const isAuthenticated = ref(false)
   const currentUser = ref({
@@ -109,6 +112,42 @@ export const useUserStore = defineStore('user', ()=> {
     }
   }
 
+  const addReview = async (productId, comment, rating) => {
+    try {
+      isProcessing.value = true
+
+      const response = await userApi.addReview(productId, comment, rating)
+
+      return response
+
+    } catch (error) {
+      throw error.message
+    } finally {
+      isProcessing.value = false
+    }
+  }
+
+  const removeReview = async (reviewId) => {
+    try {
+      isProcessing.value = true
+
+      const { status, message } = await userApi.removeReview({ reviewId })
+
+      if (status === 'success') {
+          reviews.value = reviews.value.filter(
+            (review) => review.id !== reviewId
+          )
+        }
+
+        return  { status, message }
+
+    } catch (error) {
+      throw error.message
+    } finally {
+      isProcessing.value = false
+    }
+  }
+
 
   return {
     isAuthenticated,
@@ -120,7 +159,9 @@ export const useUserStore = defineStore('user', ()=> {
     favorites,
     getFavorites,
     addFavorite,
-    removeFavorite
+    removeFavorite,
+    addReview,
+    removeReview
   }
 })
   
