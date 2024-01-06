@@ -4,8 +4,8 @@ export default {
   async getOrder({ orderId }) {
     try {
       const response = await apiHelper.get(`/orders/${orderId}`)
-
-      return response.data.data.order
+      
+      return response.data
     } catch (error) {
       throw error.response.data
     }
@@ -14,8 +14,8 @@ export default {
   async getOrders() {
     try {
       const response = await apiHelper.get(`/orders`)
-
-      return response.data.data.orders
+      
+      return response.data
     } catch (error) {
       throw error.response.data
     }

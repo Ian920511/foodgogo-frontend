@@ -3,6 +3,7 @@ import { defineStore, storeToRefs } from 'pinia'
 import adminApi from './../apis/admin'
 import { useAlert } from './../utils/alert'
 import { useStatusStore } from './statusStore'
+import { useOrderStore } from './orderStore'
 
 export const useAdminStore = defineStore('admin', () => {
   
@@ -15,7 +16,9 @@ export const useAdminStore = defineStore('admin', () => {
   const initialCategory = ref(null)
   const updateProduct = ref(null)
   const statusStore = useStatusStore()
+  const orderStore = useOrderStore()
   const { isProcessing, isLoading } = storeToRefs(statusStore)
+  const { orders } = storeToRefs(orderStore)
 
   const formData = ref({
     name: '',
@@ -156,6 +159,20 @@ export const useAdminStore = defineStore('admin', () => {
     }
   }
 
+  const getAdminOrders = async () => {
+    try {
+      const response = await adminApi.getAdminOrders()
+      
+      if (response.status === 'success') {
+        orders.value = response.data.orders
+      }
+
+      return response
+    } catch (error) {
+      errorMessage.value = error.message
+    } 
+  }
+
   return {
     showItemModal,
     activeProducts,
@@ -169,6 +186,7 @@ export const useAdminStore = defineStore('admin', () => {
     addOrUpdateItem,
     toggleActive,
     deleteItem,
-    toggleModal
+    toggleModal,
+    getAdminOrders
   }
 })

@@ -5,33 +5,31 @@ import { useCartStore } from './cartStore'
 
 export const useOrderStore = defineStore('order', ()=> {
 
+  const orders = ref([])
   const orderDetails = ref([])
-  const orderDetail = ref(null)
   const errorMessage = ref(null)
   const cartStore = useCartStore()
   const { cartItems } = storeToRefs(cartStore)
 
 
-  const getOrderDetails = async () => {
+  const getOrders = async () => {
     try {
       const response = await orderApi.getOrders()
-      if (response.data.status === 'success') {
-        orderDetails.value = response.data.orders;
-      } else {
-        throw new Error(response.data.message);
-      }
+      
+      if (response.status === 'success') {
+        orders.value = response.data.orders
+      } 
     } catch (error) {
       errorMessage.value = error.message
     } 
   }
 
-  const getOrderDetail = async (id) => {
+  const getOrderDetails = async ({ orderId }) => {
     try {
-      const response = await orderApi.getOrder(id)
-      if (response.data.status === 'success') {
-        orderDetail.value = response.data.order;
-      } else {
-        throw new Error(response.data.message);
+      const response = await orderApi.getOrder({ orderId })
+      
+      if (response.status === 'success') {
+        return response
       }
     } catch (error) {
       errorMessage.value = error.message
@@ -40,15 +38,15 @@ export const useOrderStore = defineStore('order', ()=> {
 
   const postOrder = async () => {
     if (!cartItems.value) {
-      errorMessage.value = '購物車無商品';
-      return;
+      errorMessage.value = '購物車無商品'
+      return
     }
 
     try {
       const orderItems = cartItems.value.map(item => ({
         productId: item.product.id,
         quantity: item.quantity
-      }));
+      }))
 
       const response = await orderApi.postOrder({ items: orderItems })
       
@@ -60,10 +58,10 @@ export const useOrderStore = defineStore('order', ()=> {
 
   return {
     orderDetails,
-    orderDetail,
+    orders,
     errorMessage,
     getOrderDetails,
-    getOrderDetail,
+    getOrders,
     postOrder
   }
 })

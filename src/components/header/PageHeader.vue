@@ -140,6 +140,10 @@ const handleReset = async () => {
           style="width: 300px;">
         <button class="btn btn-outline-dark my-2 my-sm-0" @click.prevent="setSearchResult('keyword')">搜索</button>
       </form>
+
+      <button class="btn btn-dark my-2 my-sm-0 mr-3" @click="router.push({ name: 'OrderView' })">
+            訂單
+      </button>
       
       <button v-if="currentUser.isAdmin" class="btn btn-dark my-2 my-sm-0 mr-3" 
       @click="router.push({ name: 'AdminView' })">

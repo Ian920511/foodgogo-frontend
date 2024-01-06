@@ -128,7 +128,7 @@ const toggleFavorite = async (productId) => {
         所有評論：
       </h2>
 
-      <div>
+      <div v-if='reviews && reviews.length' >
         <blockquote class="blockquote mb-0" v-for="review in reviews" :key="review.id">
           <button
             v-if="currentUser.isAdmin"
@@ -147,6 +147,28 @@ const toggleFavorite = async (productId) => {
         </blockquote>
         <hr>
       </div>
+      <p v-else class="text-center">
+        目前沒有評論
+      </p>
     </div>
+
+    <form>
+      <div class="form-group mb-4">
+        <label for="text">留下評論：</label>
+        <textarea
+          class="form-control"
+          rows="3"
+          name="text"
+        />
+      </div>
+      <div class="d-flex align-items-center justify-content-between">
+        <button
+          type="submit"
+          class="btn btn-primary mr-0"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
   </section>
 </template>

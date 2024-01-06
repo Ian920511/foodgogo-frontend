@@ -11,11 +11,11 @@ export default {
     }
   },
 
-  async getOrders() {
+  async getAdminOrders() {
     try {
       const response = await apiHelper.get(`/admin/orders/`)
 
-      return response.data.data.orders
+      return response.data
     } catch (error) {
       throw error.response.data
     }
