@@ -77,11 +77,7 @@ export const useUserStore = defineStore('user', ()=> {
       if (favorite) {
         return showAlert('warning', '已追蹤此商品')
       } else {
-        const { status, message, data } = await userApi.addFavorite(productId)
-
-        if (status === 'success') {
-          favorites.value = [{ ...data.newFavorite }, ...favorites.value]
-        }
+        const { status, message } = await userApi.addFavorite(productId)
 
         return { status, message }
       }
@@ -97,12 +93,6 @@ export const useUserStore = defineStore('user', ()=> {
       isProcessing.value = true
 
       const { status, message } = await userApi.removeFavorite(productId)
-      
-      if (status === 'success') {
-        favorites.value = favorites.value.filter(
-          (product) => product.productId !== productId.productId
-        )
-      }
       
       return { status, message }
 
