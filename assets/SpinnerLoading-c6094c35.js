@@ -1,0 +1,1 @@
+import{G as o,o as n,d as c,H as _,I as t,e}from"./index-ba497632.js";const a={},d=s=>(_("data-v-453b9993"),s=s(),t(),s),i={class:"spinner-container"},r=d(()=>e("div",{class:"spinner"},[e("div",{class:"bouncing-loader"},[e("div"),e("div"),e("div")])],-1)),p=[r];function v(s,l){return n(),c("div",i,p)}const u=o(a,[["render",v],["__scopeId","data-v-453b9993"]]);export{u as S};
