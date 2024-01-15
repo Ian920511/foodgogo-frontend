@@ -35,6 +35,10 @@ const router = createRouter({
       path: '/admin',
       name: 'AdminView',
       component: () => import('./../views/AdminView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: { name: 'ProductList' }
     }
   ]
 })
