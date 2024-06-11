@@ -83,7 +83,7 @@ const handleChangeOrderBy = () => {
           </p>
         </div>
         <div v-else class="row">
-          <div v-for="favorite in favorites" :key="favorite.product.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
+          <div v-for="favorite in favorites" :key="favorite.id" class="col-12 col-sm-6 col-lg-4 col-xl-3 mb-4">
             <ProductItem :product="favorite.product" />
           </div>
           <p v-if="favorites.length === 0" class="text-center">

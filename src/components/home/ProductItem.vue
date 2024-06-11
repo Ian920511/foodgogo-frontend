@@ -25,7 +25,7 @@ const { addCartItem } = cartStore
 const { showAlert } = useAlert()
 
 const isFavorited = computed(() => {
-  if (isAuthenticated.value) {
+  if (isAuthenticated.value && props.product) {
     return favorites.value.some((favorite) => favorite.product.id === props.product.id)
   } else {
     return false
@@ -93,7 +93,8 @@ const toggleFavorite = async (productId) => {
       style="height: 240px; object-fit: cover;" />
     <div class="card-body">
       <h5 class="card-title mb-1">{{ product.name }}</h5>
-      <p class="card-text text-lg font-weight-bold text-info">NT$ {{ product.price }}</p>
+      <p class="card-text text-lg font-weight-bold text-info">NT$ {{ product.price }} </p>
+      <p class="card-text text-lg font-weight-bold">庫存 {{ product.stock }}</p>
       <div class="d-flex justify-content-end">
         <button class="btn m-1" :disabled="isProcessing" 
         :class="isFavorited ? 'btn-danger' : 'btn-primary'"

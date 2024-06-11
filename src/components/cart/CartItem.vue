@@ -27,9 +27,12 @@ const updateQuantity = (id, type) => {
     } else {
       cartItem.quantity ++
     }
+
+    updateCartItem(id, cartItem.quantity)
+
   } catch (error) {
     errorMessage.value = error.message
-  }
+  } 
 }
 
 const handleRemoveCartItem = (cartItemId) => {

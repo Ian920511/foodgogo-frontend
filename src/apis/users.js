@@ -14,7 +14,7 @@ export default {
   async getFavorites() {
     try {
       const response = await apiHelper.get('/favorite')
-
+      
       return response.data
     } catch (error) {
       throw error.response.data
@@ -41,9 +41,9 @@ export default {
     }
   },
 
-  async addReview({ productId, comment, rating }) {
+  async addReview({ productId, comment }) {
     try {
-      const response = await apiHelper.post('/reviews', { productId, comment, rating })
+      const response = await apiHelper.post('/reviews', { productId, comment })
 
       return response
     } catch(error) {

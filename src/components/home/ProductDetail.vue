@@ -24,7 +24,6 @@ const { addCartItem } = cartStore
 const { showAlert } = useAlert()
 const isFavorited = ref(false)
 const text = ref('')
-const rating = ref('')
 
 onMounted(async () => {
   await getProduct(route.params.productId)
@@ -103,12 +102,8 @@ const handlePostReview = async () => {
     if (!text.value) {
       return showAlert('error', '評論必須輸入內容')
     }
-
-    if (!rating.value) {
-      return showAlert('error', '評論必須輸入等級')
-    }
     
-    const response = await addReview({ productId, comment: text.value, rating: rating.value })
+    const response = await addReview({ productId, comment: text.value })
 
     const newReview = {
       ...response.data.data.review,
@@ -202,17 +197,6 @@ const handleRemoveReview = (reviewId) => {
       </p>
     </div>
 
-    <div class="form-group">
-      <label for="rating">rating</label>
-      <select id="rating" v-model.number="rating" class="form-control" name="rating" required>
-        <option value="" disabled selected>Enter rating</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-    </div>
     <form>
       <div class="form-group mb-4">
         <label for="text">留下評論：</label>
