@@ -26,6 +26,7 @@ export const useAdminStore = defineStore('admin', () => {
     image: '',
     categoryId: '',
     price: '',
+    stock: '',
     active: true,
   })
 
@@ -166,7 +167,7 @@ export const useAdminStore = defineStore('admin', () => {
       if (response.status === 'success') {
         orders.value = response.data.orders
       }
-      console.log(response.data)
+      
       return response
     } catch (error) {
       errorMessage.value = error.message

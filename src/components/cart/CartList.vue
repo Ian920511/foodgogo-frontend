@@ -71,12 +71,13 @@ const submitOrder = async () => {
           <table class="table">
             <thead>
               <tr>
-                <th>刪除</th>
-                <th>圖片</th>
-                <th>名稱</th>
-                <th>單價</th>
-                <th>數量</th>
-                <th>總計</th>
+                <th class="text-center">刪除</th>
+                <th class="text-center">圖片</th>
+                <th class="text-center">名稱</th>
+                <th class="text-center">單價</th>
+                <th class="text-center">庫存</th>
+                <th class="text-center">數量</th>
+                <th class="text-center">總計</th>
               </tr>
             </thead>
             <tbody>

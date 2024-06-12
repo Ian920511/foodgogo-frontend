@@ -61,6 +61,7 @@ onMounted(async () => {
               <th class="w-20" scope="col">商品名稱</th>
               <th class="w-25" scope="col">商品描述</th>
               <th class="w-15" scope="col">商品單價</th>
+              <th class="w-15" scope="col">商品庫存</th>
               <th class="w-15" scope="col">{{ active ? '更新' : '上架' }}商品</th>
             </tr>
           </thead>

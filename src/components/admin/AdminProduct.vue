@@ -40,6 +40,7 @@ const handleRemoveProduct = (id) => {
     <td>{{ product.name }}</td>
     <td>{{ product.description }}</td>
     <td>NT$ {{ product.price }}</td>
+    <td>{{ product.stock }}</td>
     <td>
       <button v-if="!active" class="btn btn-primary btn-sm" :disabled="isProcessing" 
       @click="toggleActive(product.id, active)"> 上架

@@ -78,6 +78,11 @@ const handleSubmit = async (event) => {
         <input id="price" v-model="formData.price" type="number" class="form-control" placeholder="Enter price" name="price">
       </div>
 
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input id="stock" v-model="formData.stock" type="number" class="form-control" placeholder="Enter stock" name="stock">
+      </div>
+
       <div class="form-label-group mb-3">
         <label for="role">Status</label>
         <select id="status" name="status" class="form-control" v-model="formData.active" required>

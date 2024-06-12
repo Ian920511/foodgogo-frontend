@@ -31,7 +31,7 @@ const updateQuantity = (id, type) => {
     updateCartItem(id, cartItem.quantity)
 
   } catch (error) {
-    errorMessage.value = error.message
+    showAlert('error', error)
   } 
 }
 
@@ -62,6 +62,7 @@ const handleRemoveCartItem = (cartItemId) => {
       {{ cartItem.product.name }}
     </td>
     <td>NT$ {{ cartItem.product.price }}</td>
+    <td>{{ cartItem.product.stock }}</td>
     <td>
       <div class="flex items-center justify-center">
         <button @click="updateQuantity(cartItem.id, '-')">-</button>

@@ -71,9 +71,13 @@ export const useCartStore = defineStore('cart', ()=> {
   const updateCartItem = async (cartItemId, quantity) => {
     try {
       const cartItem = cartItems.value.find((item) => item.id === cartItemId)
-
+      
       if (quantity < 1 || isNaN(quantity)) {
         cartItem.quantity = 1
+      } else if (quantity > cartItem.product.stock) {
+        cartItem.quantity = cartItem.product.stock
+
+        return showAlert('warning', '數量不能大於庫存')
       } else {
         cartItem.quantity = quantity
       }
