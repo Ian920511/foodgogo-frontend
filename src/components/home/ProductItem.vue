@@ -1,5 +1,5 @@
 <script setup>
-import { computed  } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import  { useUserStore } from './../../stores/userStore'
@@ -23,15 +23,19 @@ const { isAuthenticated, favorites } = storeToRefs(userStore)
 const { addFavorite, removeFavorite } = userStore
 const { addCartItem } = cartStore
 const { showAlert } = useAlert()
+const favoritesLoaded = ref(false)
 
 const isFavorited = computed(() => {
-  if (isAuthenticated.value && props.product) {
-    return favorites.value.some((favorite) => favorite.product.id === props.product.id)
-  } else {
-    return false
-  }
+  return isAuthenticated.value && props.product &&
+     favorites.value.some((favorite) => favorite.product.id === props.product.id)
 })
 
+onMounted(async () => {
+  if (!favorites.value.length) {
+    await userStore.getFavorites()
+  }
+  favoritesLoaded.value = true
+})
 
 
 const handleShowDetail = (id) => {

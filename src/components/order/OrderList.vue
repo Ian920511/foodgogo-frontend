@@ -25,6 +25,7 @@ const currentOrderId = ref(null)
 const buyer = ref(null)
 
 onMounted(async () => {
+  
   try {
     if (!currentUser.value.isAdmin) {    
       await getOrders()
@@ -34,7 +35,10 @@ onMounted(async () => {
 
   } catch (error) {
     showAlert('error', error)
+    
     return router.replace({ name: 'ProductList' })
+  } finally {
+    isLoading.value = false
   }
 })
 

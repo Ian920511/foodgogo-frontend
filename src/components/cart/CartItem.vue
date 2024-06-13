@@ -31,7 +31,7 @@ const updateQuantity = (id, type) => {
     updateCartItem(id, cartItem.quantity)
 
   } catch (error) {
-    showAlert('error', error)
+    errorMessage.value = error.message
   } 
 }
 

@@ -39,12 +39,16 @@ const submitOrder = async () => {
         
         if (response.data.status === 'success') {
           cartItems.value = []
-        }
 
-        showAlert('success', response.data.message )
+          const paymentUrl = response.data.data.paymentUrl
+          window.location.href = paymentUrl
+
+        } else {
+          showAlert('error', '期待您再次消費' )
+        }
         
       } catch (error) {
-        console.error(error)
+        showAlert('error', '下訂單失敗，請稍後再試' )
       }
     }
     return

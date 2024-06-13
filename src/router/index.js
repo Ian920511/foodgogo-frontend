@@ -43,4 +43,12 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach((to, from, next) => {
+  if (to.path === '/orders' && (to.query.transactionId || to.query.orderId)) {
+    next({ path: '/orders',  replace: true });
+  } else {
+    next();
+  }
+})
+
 export default router
