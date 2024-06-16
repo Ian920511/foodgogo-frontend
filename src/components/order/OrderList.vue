@@ -94,6 +94,7 @@ const toggleOrderDetails = async (orderId) => {
               <th>訂單編號</th>
               <th>日期</th>
               <th>總價</th>
+              <th>訂單狀態</th>
               <th>詳細</th>
             </tr>
           </thead>
@@ -102,13 +103,14 @@ const toggleOrderDetails = async (orderId) => {
               <td>{{ order.id }}</td>
               <td>{{ moment(order.createdAt).format('L') }}</td>
               <td>{{ order.totalPrice }}</td>
+              <td>{{ order.status }}</td>
               <td>
                 <button class="btn btn-primary mt-3 px-5" @click="toggleOrderDetails(order.id)">
-              展開
+                  展開
                 </button>
               </td>
             </tr>
-            <tr v-if="currentOrderId === order.id" >
+            <tr v-if="currentOrderId === order.id">
               <td colspan="4">
                 <table class="table table-bordered">
                   <thead>
@@ -130,7 +132,7 @@ const toggleOrderDetails = async (orderId) => {
                       <th>買家電話</th>
                       <th>買家地址</th>
                     </tr>
-                    <tr v-if="currentUser.isAdmin"> 
+                    <tr v-if="currentUser.isAdmin">
                       <td>{{ buyer.username }}</td>
                       <td>{{ buyer.email }}</td>
                       <td>{{ buyer.tel }}</td>

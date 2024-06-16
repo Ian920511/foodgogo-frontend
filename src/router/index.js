@@ -32,6 +32,11 @@ const router = createRouter({
       component: () => import('./../views/OrderView.vue')
     },
     {
+      path: '/linepay/confirm',
+      name: 'PaymentConfirmation',
+      component: () => import('./../views/LinePayView.vue')
+    },
+    {
       path: '/admin',
       name: 'AdminView',
       component: () => import('./../views/AdminView.vue')
@@ -43,12 +48,12 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (to.path === '/orders' && (to.query.transactionId || to.query.orderId)) {
-    next({ path: '/orders',  replace: true });
-  } else {
-    next();
-  }
-})
+// router.beforeEach((to, from, next) => {
+//   if (to.path === '/orders' && (to.query.transactionId || to.query.orderId)) {
+//     next({ path: '/orders',  replace: true });
+//   } else {
+//     next();
+//   }
+// })
 
 export default router
